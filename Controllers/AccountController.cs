@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using AllergyApp.Models;
 using AllergyApp.Providers;
 using AllergyApp.Results;
+using System.Linq;
 
 namespace AllergyApp.Controllers
 {
@@ -120,7 +121,7 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
@@ -140,7 +141,7 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
@@ -159,7 +160,7 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
@@ -197,7 +198,7 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             IdentityResult result;
@@ -325,19 +326,27 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
+           
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+               OAuthDefaults.AuthenticationType);
+            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                CookieAuthenticationDefaults.AuthenticationType);
+
+            AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+            AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
+            Authentication.SignIn(cookiesIdentity);
+            return Ok("Registration successful");
         }
 
         // POST api/Account/RegisterExternal
@@ -348,7 +357,7 @@ namespace AllergyApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             var info = await Authentication.GetExternalLoginInfoAsync();
@@ -414,7 +423,7 @@ namespace AllergyApp.Controllers
                     return BadRequest();
                 }
 
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
             return null;
