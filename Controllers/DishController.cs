@@ -24,6 +24,7 @@ namespace AllergyApp.Controllers
 			oldData.title = newData.title;
 			oldData.description = newData.description;
 			oldData.restaurant_id = newData.restaurant_id;
+			oldData.price = newData.price;
 		}
 
 		private static Expression<Func<Dish, bool>> IdComparatorFactory(int id)

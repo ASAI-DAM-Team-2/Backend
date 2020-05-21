@@ -26,5 +26,8 @@ namespace AllergyApp
         public string picture { get; set; }
 
         public int? restaurant_id { get; set; }
+
+        [Required]
+        public double price { get; set; }
     }
 }
