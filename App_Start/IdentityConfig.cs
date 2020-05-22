@@ -18,6 +18,9 @@ namespace AllergyApp
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
+            context.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            context.Response.Headers.Add("Access-Control-Allow-Methods", new[] { "DELETE", "POST", "GET", "PUT", "OPTIONS" });
+            context.Response.Headers.Add("Access-Control-Allow-Headers", new[] { "Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With" });
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<AllergyAppDb>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)

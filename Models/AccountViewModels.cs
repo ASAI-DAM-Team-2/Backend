@@ -27,6 +27,10 @@ namespace AllergyApp.Models
 
     public class UserInfoViewModel
     {
+        public string Name { get; internal set; }
+
+        public string Surname { get; internal set; }
+
         public string Email { get; set; }
 
         public bool HasRegistered { get; set; }

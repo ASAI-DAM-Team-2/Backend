@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -58,12 +57,16 @@ namespace AllergyApp.Controllers
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
+            var id = User.Identity.GetUserId<string>();
+            var db = new AllergyAppDb();
+            var user = db.Users.FirstOrDefault(u => u.Id == id);
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                Name = user?.Name,
+                Surname = user?.Surname,
+                Email = user?.Email,
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin?.LoginProvider
             };
         }
 
@@ -324,6 +327,8 @@ namespace AllergyApp.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
+
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
@@ -337,7 +342,16 @@ namespace AllergyApp.Controllers
             {
                 return GetErrorResult(result);
             }
-            return Ok("Registration successful");
+
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                    OAuthDefaults.AuthenticationType);
+            ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                CookieAuthenticationDefaults.AuthenticationType);
+
+            AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+            Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+
+            return Ok();
         }
 
         // POST api/Account/RegisterExternal
