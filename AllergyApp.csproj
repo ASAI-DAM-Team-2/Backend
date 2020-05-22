@@ -184,6 +184,15 @@
   <ItemGroup>
     <Compile Include="Controllers\AllergenController.cs" />
     <Compile Include="Controllers\CrudController.cs" />
+    <Compile Include="Migrations\202005221156162_Moving pass to base db.cs" />
+    <Compile Include="Migrations\202005221156162_Moving pass to base db.designer.cs">
+      <DependentUpon>202005221156162_Moving pass to base db.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005221202147_UsernameNameAndSurname.cs" />
+    <Compile Include="Migrations\202005221202147_UsernameNameAndSurname.designer.cs">
+      <DependentUpon>202005221202147_UsernameNameAndSurname.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Allergen.cs" />
     <Compile Include="Models\Allergen_Dish.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -332,6 +341,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202005221156162_Moving pass to base db.resx">
+      <DependentUpon>202005221156162_Moving pass to base db.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005221202147_UsernameNameAndSurname.resx">
+      <DependentUpon>202005221202147_UsernameNameAndSurname.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

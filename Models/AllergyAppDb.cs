@@ -4,12 +4,21 @@ namespace AllergyApp
 	using System.Data.Entity;
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Linq;
+	using Microsoft.AspNet.Identity.EntityFramework;
+	using AllergyApp.Models;
+	using System.Data.Entity.Infrastructure;
+	using System.Data.Entity.ModelConfiguration.Conventions;
 
-	public partial class AllergyAppDb : DbContext
+	public partial class AllergyAppDb : IdentityDbContext<ApplicationUser>
 	{
 		public AllergyAppDb()
-			: base("name=AllergyAppServer")
+			: base("AllergyAppServer", throwIfV1Schema: false)
 		{
+		}
+
+		public static AllergyAppDb Create()
+		{
+			return new AllergyAppDb();
 		}
 
 		public virtual DbSet<Allergen> Allergens { get; set; }
@@ -22,6 +31,8 @@ namespace AllergyApp
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+
 			modelBuilder.Entity<database_firewall_rules>()
 				.Property(e => e.start_ip_address)
 				.IsUnicode(false);

@@ -329,7 +329,7 @@ namespace AllergyApp.Controllers
                 return BadRequest(ModelState.Values.First().Errors.First().ErrorMessage);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email, Name = model.Name, Surname = model.Surname };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
            
@@ -337,15 +337,6 @@ namespace AllergyApp.Controllers
             {
                 return GetErrorResult(result);
             }
-
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-               OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                CookieAuthenticationDefaults.AuthenticationType);
-
-            AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-            AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
-            Authentication.SignIn(cookiesIdentity);
             return Ok("Registration successful");
         }
 

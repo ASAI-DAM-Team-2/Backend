@@ -34,6 +34,11 @@ namespace AllergyApp.Models
 
     public class RegisterBindingModel
     {
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Display(Name = "Surname")]
+        public string Surname { get; set; }
 
         [Required]
         [Display(Name = "Email")]
