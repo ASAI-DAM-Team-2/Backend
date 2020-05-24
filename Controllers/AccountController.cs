@@ -16,6 +16,7 @@ using AllergyApp.Models;
 using AllergyApp.Providers;
 using AllergyApp.Results;
 using System.Linq;
+using System.Web.Http.Cors;
 
 namespace AllergyApp.Controllers
 {
@@ -69,6 +70,30 @@ namespace AllergyApp.Controllers
                 LoginProvider = externalLogin?.LoginProvider
             };
         }
+
+
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        [Route("UserInfo")]
+        [HttpPut]
+        public UserInfoViewModel UpdateUserInfo(ChangeUserInfoBindingModel userInfo)
+        {
+            var id = User.Identity.GetUserId<string>();
+            var db = new AllergyAppDb();
+            var user = db.Users.FirstOrDefault(u => u.Id == id);
+            user.Name = userInfo.Name;
+            user.Surname = userInfo.Surname;
+            user.Email = userInfo.Email;
+            user.UserName = userInfo.Email;
+            db.SaveChanges();
+            return new UserInfoViewModel
+            {
+                Name = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+                HasRegistered = true
+            };
+        }
+
 
         // POST api/Account/Logout
         [Route("Logout")]
@@ -325,6 +350,7 @@ namespace AllergyApp.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
+        //[EnableCors(origins: "*", headers: "*", methods: "*")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
 
@@ -343,13 +369,13 @@ namespace AllergyApp.Controllers
                 return GetErrorResult(result);
             }
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                CookieAuthenticationDefaults.AuthenticationType);
+            //ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+            //        OAuthDefaults.AuthenticationType);
+            //ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
+            //    CookieAuthenticationDefaults.AuthenticationType);
 
-            AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
-            Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+            //AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+            //Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
 
             return Ok();
         }
