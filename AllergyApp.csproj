@@ -195,6 +195,18 @@
     <Compile Include="Migrations\202005221202147_UsernameNameAndSurname.designer.cs">
       <DependentUpon>202005221202147_UsernameNameAndSurname.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006280732433_NewDb.cs" />
+    <Compile Include="Migrations\202006280732433_NewDb.designer.cs">
+      <DependentUpon>202006280732433_NewDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006280739356_Maybe.cs" />
+    <Compile Include="Migrations\202006280739356_Maybe.designer.cs">
+      <DependentUpon>202006280739356_Maybe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006280745433_Maybe2.cs" />
+    <Compile Include="Migrations\202006280745433_Maybe2.designer.cs">
+      <DependentUpon>202006280745433_Maybe2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Allergen.cs" />
     <Compile Include="Models\Allergen_Dish.cs" />
@@ -284,6 +296,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <None Include="Properties\PublishProfiles\AllergyAppBackend - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\allergyappipb - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.5.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.0.js" />
     <Content Include="Scripts\jquery-3.5.0.min.js" />
@@ -351,6 +364,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005221202147_UsernameNameAndSurname.resx">
       <DependentUpon>202005221202147_UsernameNameAndSurname.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006280732433_NewDb.resx">
+      <DependentUpon>202006280732433_NewDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006280739356_Maybe.resx">
+      <DependentUpon>202006280739356_Maybe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006280745433_Maybe2.resx">
+      <DependentUpon>202006280745433_Maybe2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
